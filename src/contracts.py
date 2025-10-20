@@ -1,15 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import Optional
 
-from src.objects import GameObject
+from src.objects import Color, GameObject
 
 
-class Engine(ABC):
+class IEngine(ABC):
     @abstractmethod
-    def init(self, width: int, height: int, caption: str, fps: Optional[int]) -> None: ...
+    def init(self, width: int, height: int, caption: str) -> None: ...
 
     @abstractmethod
-    def start(self) -> None: ...
+    def start(self, fill_color: Color, fps: int) -> None: ...
 
     @abstractmethod
     def add_game_object(self, game_object: GameObject) -> None: ...
