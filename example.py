@@ -11,9 +11,10 @@ def main():
     rect = Rect(x=0, y=0, width=100, height=100, color=red)
 
     engine.add_game_objects([rect])
-    engine.init(width=600, height=600, caption='Nao sei')
-    engine.start(black, 30)
-    print('test')
+    engine.init(width=600, height=600, caption='Nao sei', fill_color=black, fps=30)
+    while engine.is_running:
+        rect.x += 1  # Rect must move to the right
+        engine.update()
 
 
 if __name__ == '__main__':

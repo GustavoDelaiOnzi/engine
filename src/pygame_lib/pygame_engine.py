@@ -1,5 +1,4 @@
-import sys
-from typing import List, Tuple
+from typing import List
 
 import pygame
 
@@ -12,35 +11,47 @@ class PygameEngine(IEngine):
     def __init__(self, translate_game_objects: ITranslateGameObjects):
         self._screen = None
         self._clock = None
-        self._rects: List[Tuple[pygame.Rect, Tuple[int, int, int]]] = []
+        self._fill_color = None
+        self._fps = None
+
+        self._is_running = False
+
+        self._rects: List[GameObject] = []
         self._translate_game_objects = translate_game_objects
 
-    def init(self, width: int, height: int, caption: str) -> None:
+    @property
+    def is_running(self) -> bool:
+        return self._is_running
+
+    def init(self, width: int, height: int, caption: str, fill_color: Color, fps: int) -> None:
         pygame.init()
         screen = pygame.display.set_mode((width, height))
         pygame.display.set_caption(caption)
 
         self._screen = screen
         self._clock = pygame.time.Clock()
+        self._fill_color = fill_color
+        self._fps = fps
+        self._is_running = True
 
-    def start(self, fill_color: Color, fps: int):
-        if not self._screen or not self._clock:
+    def update(self):
+        if not self._screen or not self._clock or not self._fps or not self._fill_color:
             raise PygameValueError('Must init first.')
 
-        while True:  # TODO: custom inputs
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                self._is_running = False
+                return
 
-            self._screen.fill(fill_color.to_tuple())
+        self._screen.fill(self._fill_color.to_tuple())
 
-            for rect in self._rects:
-                pygame.draw.rect(self._screen, rect[1], rect[0])
+        rects = self._translate_game_objects.translate(self._rects)
+        for rect in rects:
+            pygame.draw.rect(self._screen, rect[1], rect[0])
 
-            pygame.display.flip()
-            self._clock.tick(fps)
+        pygame.display.flip()
+        self._clock.tick(self._fps)
 
-    def add_game_objects(self, game_objects: List[GameObject]) -> None:
-        translated_objects = self._translate_game_objects.translate(game_objects)
-        self._rects.extend(translated_objects)
+    def add_game_objects(self, game_objects: List[GameObject]) -> None:  # TODO: Validate if rect
+        self._rects.extend(game_objects)
