@@ -10,6 +10,9 @@ version = "0.2.1"
 update_changelog_on_bump = true
 major_version_zero = true
 
+[tool.setuptools.packages.find]
+where = ["src"]
+
 version_files = [
     "pyproject.toml:version"
 ]
