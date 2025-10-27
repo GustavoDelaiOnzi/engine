@@ -1,3 +1,10 @@
+## 0.2.2 (2025-10-26)
+
+### Fix
+
+- project structure
+- make package usable
+
 ## 0.2.1 (2025-10-26)
 
 ### Fix
