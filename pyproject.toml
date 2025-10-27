@@ -1,6 +1,9 @@
 [project]
 name = "engine"
 version = "0.2.1"
+dependencies = [
+    "pygame>=2.6.1"
+]
 
 [tool.commitizen]
 name = "cz_conventional_commits"
@@ -9,10 +12,9 @@ version_scheme = "semver"
 version = "0.2.1"
 update_changelog_on_bump = true
 major_version_zero = true
-
-[tool.setuptools.packages.find]
-where = ["src"]
-
 version_files = [
     "pyproject.toml:version"
 ]
+
+[tool.setuptools.packages.find]
+where = ["src"]
